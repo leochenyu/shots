@@ -14,7 +14,13 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            driverClassName = "org.postgresql.Driver"
+			dialect = org.hibernate.dialect.PostgreSQLDialect
+			uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
+		   
+			url = "jdbc:postgresql://"+uri.host+uri.path
+			username = uri.userInfo.split(":")[0]
+			password = uri.userInfo.split(":")[1]
         }
     }
     test {
@@ -26,18 +32,13 @@ environments {
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
-            pooled = true
-            properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="SELECT 1"
-            }
+            driverClassName = "org.postgresql.Driver"
+			dialect = org.hibernate.dialect.PostgreSQLDialect
+			uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
+		   
+			url = "jdbc:postgresql://"+uri.host+uri.path
+			username = uri.userInfo.split(":")[0]
+			password = uri.userInfo.split(":")[1]
         }
     }
 }
