@@ -66,6 +66,17 @@ class QuestionController {
         redirect(action: "show", id: questionInstance.id)
     }
 
+	def test(Long id) {
+		def questionInstance = Question.get(id)
+		if (!questionInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'question.label', default: 'Question'), id])
+			redirect(action: "list")
+			return
+		}
+
+		[questionInstance: questionInstance]
+	}
+
     def show(Long id) {
         def questionInstance = Question.get(id)
         if (!questionInstance) {
@@ -112,6 +123,8 @@ class QuestionController {
 			              inputBy: questionInstance.inputBy]
 		session["defaultValue"] = defaultVal
 
+		questionInstance.answers.removeAll { it.deleted }
+		
         if (!questionInstance.save(flush: true)) {
             render(view: "edit", model: [questionInstance: questionInstance])
             return

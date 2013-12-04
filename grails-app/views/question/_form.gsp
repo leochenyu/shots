@@ -1,5 +1,21 @@
 <%@ page import="ots.Question" %>
 
+<script type="text/javascript">
+    var childCount = ${questionInstance?.answers.size()} + 0;
+    
+    function addChild() {
+        var htmlId = "answer" + childCount;
+        var deleteIcon = "${resource(dir:'images/skin', file:'database_delete.png')}";
+        var templateHtml = "<div id='" + htmlId + "' name='" + htmlId + "'>\n";
+        templateHtml += "<input type='text' id='answers[" + childCount + "].serialNum' name='answers[" + childCount + "].serialNum' size='1'/>\n";
+        templateHtml += "<input type='text' id='answers[" + childCount + "].content' name='answers[" + childCount + "].content' size='60'/>\n";
+        templateHtml += "<input type='checkbox' id='answers[" + childCount + "].correct' name='answers[" + childCount + "].correct'/>\n";
+        templateHtml += "<span onClick='$(\"#" + htmlId + "\").remove();'><img src='" + deleteIcon + "' /></span>\n";
+        templateHtml += "</div>\n";
+        $("#childList").append(templateHtml);
+        childCount++;
+    }
+</script>
 
 
 <div class="fieldcontain ${hasErrors(bean: questionInstance, field: 'description', 'error')} required">
@@ -7,7 +23,7 @@
 		<g:message code="question.description.label" default="Description" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textArea name="description" cols="40" rows="5" maxlength="1000" required="" value="${questionInstance?.description}"/>
+	<g:textArea name="description" cols="60" rows="5" maxlength="1000" required="" value="${questionInstance?.description}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: questionInstance, field: 'type', 'error')} ">
@@ -39,7 +55,7 @@
 		<g:message code="question.analysis.label" default="Analysis" />
 		
 	</label>
-	<g:textArea name="analysis" cols="40" rows="5" maxlength="1000" value="${questionInstance?.analysis}"/>
+	<g:textArea name="analysis" cols="60" rows="5" maxlength="1000" value="${questionInstance?.analysis}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: questionInstance, field: 'inputDate', 'error')} required">
@@ -53,17 +69,23 @@
 <div class="fieldcontain ${hasErrors(bean: questionInstance, field: 'answers', 'error')} ">
 	<label for="answers">
 		<g:message code="question.answers.label" default="Answers" />
-		
 	</label>
-	
-<ul class="one-to-many">
-<g:each in="${questionInstance?.answers?}" var="a">
-    <li><g:link controller="answer" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
-</g:each>
-<li class="add">
-<g:link controller="answer" action="create" params="['question.id': questionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'answer.label', default: 'Answer')])}</g:link>
-</li>
-</ul>
+
+	<ul class="one-to-many">
+	<div id="childList">
+    	<g:each var="answer" in="${questionInstance?.answers?}" status="i">
+        	<div id="answer${i}">
+    			<g:hiddenField name='answers[${i}].id' value='${answer.id}'/>
+    			<g:textField name='answers[${i}].serialNum' value='${answer.serialNum}' size='1'/>
+    			<g:textField name='answers[${i}].content' value='${answer.content}' size='60'/>
+    			<g:checkBox name='answers[${i}].correct' value='${answer.correct}'/>
+    			<input type="hidden" name='answers[${i}].deleted' id='answers[${i}].deleted' value='false'/>
+    			<span onClick="$('#answers\\[${i}\\]\\.deleted').val('true'); $('#answer${i}').hide()"><img src="${resource(dir:'images/skin', file:'database_delete.png')}" /></span>
+			</div>
+    	</g:each>
+	</div>
+	<input type="button" value="Add answer" onclick="console.log($('#answers\\[0\\]\\.deleted')); console.log($('#answers\\[1\\]\\.deleted')); addChild();" />
+	</ul>
 
 </div>
 
