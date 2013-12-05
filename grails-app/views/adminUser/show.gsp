@@ -23,15 +23,6 @@
 			</g:if>
 			<ol class="property-list adminUser">
 			
-				<g:if test="${adminUserInstance?.fullName}">
-				<li class="fieldcontain">
-					<span id="fullName-label" class="property-label"><g:message code="adminUser.fullName.label" default="Full Name" /></span>
-					
-						<span class="property-value" aria-labelledby="fullName-label"><g:fieldValue bean="${adminUserInstance}" field="fullName"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${adminUserInstance?.userName}">
 				<li class="fieldcontain">
 					<span id="userName-label" class="property-label"><g:message code="adminUser.userName.label" default="User Name" /></span>
@@ -41,11 +32,38 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${adminUserInstance?.fullName}">
+				<li class="fieldcontain">
+					<span id="fullName-label" class="property-label"><g:message code="adminUser.fullName.label" default="Full Name" /></span>
+					
+						<span class="property-value" aria-labelledby="fullName-label"><g:fieldValue bean="${adminUserInstance}" field="fullName"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${adminUserInstance?.password}">
 				<li class="fieldcontain">
 					<span id="password-label" class="property-label"><g:message code="adminUser.password.label" default="Password" /></span>
 					
 						<span class="property-value" aria-labelledby="password-label"><g:fieldValue bean="${adminUserInstance}" field="password"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${adminUserInstance?.email}">
+				<li class="fieldcontain">
+					<span id="email-label" class="property-label"><g:message code="adminUser.email.label" default="Email" /></span>
+					
+						<span class="property-value" aria-labelledby="email-label"><g:fieldValue bean="${adminUserInstance}" field="email"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${adminUserInstance?.role}">
+				<li class="fieldcontain">
+					<span id="role-label" class="property-label"><g:message code="adminUser.role.label" default="Role" /></span>
+					
+						<span class="property-value" aria-labelledby="role-label"><g:fieldValue bean="${adminUserInstance}" field="role"/></span>
 					
 				</li>
 				</g:if>

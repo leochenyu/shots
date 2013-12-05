@@ -4,30 +4,18 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class QuestionController {
 
-	static def lastQuestionType
-	static def lastQuestionSource
-	static def lastQuestionTerm
-	static def lastQuestionInputBy
-
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-	def rememberDuplicateFields(Question questionInstance) {
-		log.error "rem: " + questionInstance.type
-		lastQuestionType = questionInstance.type
-		lastQuestionSource = questionInstance.source
-		lastQuestionTerm = questionInstance.term
-		lastQuestionInputBy = questionInstance.inputBy
+	def beforeInterceptor = [action:this.&checkUser]
+	
+	def checkUser() {
+		if (!session.user) {
+			// i.e. user not logged in
+			redirect(controller:'adminUser',action:'login')
+			return false
+		}
 	}
-
-	def setDuplicateFields(Question questionInstance) {
-		log.error "set: " + lastQuestionType
-		
-		questionInstance.type = lastQuestionType
-		questionInstance.source = lastQuestionSource
-		questionInstance.term = lastQuestionTerm
-		questionInstance.inputBy = lastQuestionInputBy
-	}
-
+	
     def index() {
         redirect(action: "list", params: params)
     }

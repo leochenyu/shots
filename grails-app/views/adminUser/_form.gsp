@@ -2,6 +2,14 @@
 
 
 
+<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'userName', 'error')} required">
+	<label for="userName">
+		<g:message code="adminUser.userName.label" default="User Name" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="userName" required="" value="${adminUserInstance?.userName}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'fullName', 'error')} ">
 	<label for="fullName">
 		<g:message code="adminUser.fullName.label" default="Full Name" />
@@ -10,20 +18,28 @@
 	<g:textField name="fullName" value="${adminUserInstance?.fullName}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'userName', 'error')} ">
-	<label for="userName">
-		<g:message code="adminUser.userName.label" default="User Name" />
-		
-	</label>
-	<g:textField name="userName" value="${adminUserInstance?.userName}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'password', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'password', 'error')} required">
 	<label for="password">
 		<g:message code="adminUser.password.label" default="Password" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field type="password" name="password" required="" value="${adminUserInstance?.password}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'email', 'error')} ">
+	<label for="email">
+		<g:message code="adminUser.email.label" default="Email" />
 		
 	</label>
-	<g:field type="password" name="password" value="${adminUserInstance?.password}"/>
+	<g:field type="email" name="email" value="${adminUserInstance?.email}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'role', 'error')} ">
+	<label for="role">
+		<g:message code="adminUser.role.label" default="Role" />
+		
+	</label>
+	<g:select name="role" from="${adminUserInstance.constraints.role.inList}" value="${adminUserInstance?.role}" valueMessagePrefix="adminUser.role" noSelection="['': '']"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: adminUserInstance, field: 'question', 'error')} ">

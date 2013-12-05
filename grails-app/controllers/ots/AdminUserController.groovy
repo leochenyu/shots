@@ -6,6 +6,44 @@ class AdminUserController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	def beforeInterceptor = [action:this.&checkUser, except: ['login', 'authenticate']]
+
+	def checkUser() {
+		if (!session.user) {
+			log.error session.user
+			// i.e. user not logged in
+			redirect(controller:'adminUser',action:'login')
+			return false
+		} else if (!session.user.admin) {
+			redirect(controller:'question', action:'list')
+			return false
+		}
+	}
+
+	def login = {}
+	
+	def logout = {
+		flash.message = "Goodbye ${session.user.userName}"
+		session.user = null
+		redirect(action:"login")
+	}
+	
+	def authenticate = {
+		def user = AdminUser.findByUserNameAndPassword(params.userName, params.password)
+		if(user){
+			session.user = user
+			flash.message = "Hello ${user.fullName}!"
+			if(user.admin){
+				redirect(controller:"adminUser", action:"index")
+			} else{
+				redirect(controller:"question", action:"list")
+			}
+		} else {
+			flash.message = "Sorry, ${params.userName}. Please try again."
+			redirect(action:"login")
+		}
+	}
+	
     def index() {
         redirect(action: "list", params: params)
     }
